@@ -9,6 +9,10 @@ export class Citizen implements ICitizen {
   get name(): string {
     return this._name;
   }
+  
+  set name(name) {
+    this._name = name
+  }
 
   get cpf(): string {
     return this._cpf;

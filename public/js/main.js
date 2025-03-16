@@ -85,7 +85,6 @@ async function searchCitizen() {
             buttonDelete.innerHTML = '<i class="fas fa-trash"></i>';
             buttonDelete.className = 'button-delete';
 
-            // Evento para atualização usando SweetAlert2
             buttonUpdate.addEventListener('click', async () => {
                 const { value: updatedName } = await Swal.fire({
                     title: 'Atualizar Cidadão',
@@ -99,7 +98,7 @@ async function searchCitizen() {
 
                 if (updatedName) {
                     try {
-                        const updateResponse = await fetch(`/api/citizens/${citizen.id}`, {
+                        const updateResponse = await fetch(`/api/citizens?cpf=${citizen.cpf}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ name: updatedName })
@@ -107,7 +106,7 @@ async function searchCitizen() {
 
                         if (updateResponse.ok) {
                             Swal.fire('Atualizado!', 'O cidadão foi atualizado com sucesso.', 'success');
-                            searchCitizen(); // Atualiza os resultados
+                            searchCitizen(); 
                         } else {
                             Swal.fire('Erro!', 'Não foi possível atualizar o cidadão.', 'error');
                         }
@@ -117,7 +116,6 @@ async function searchCitizen() {
                 }
             });
 
-            // Evento para exclusão usando SweetAlert2
             buttonDelete.addEventListener('click', async () => {
                 const result = await Swal.fire({
                     title: 'Tem certeza?',
@@ -130,7 +128,7 @@ async function searchCitizen() {
 
                 if (result.isConfirmed) {
                     try {
-                        const deleteResponse = await fetch(`/api/citizens/${citizen.id}`, {
+                        const deleteResponse = await fetch(`/api/citizens?cpf=${citizen.cpf}`, {
                             method: 'DELETE'
                         });
 

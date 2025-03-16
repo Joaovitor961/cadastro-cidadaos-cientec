@@ -44,7 +44,7 @@ const server = http.createServer(async (req, res) => {
 
   try {
     let body = '';
-    if (req.method === 'POST') {
+    if (req.method === 'POST' || req.method === 'PUT') {
       await new Promise<void>((resolve, reject) => {
         req.on('data', chunk => {
           body += chunk.toString();

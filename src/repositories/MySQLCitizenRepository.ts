@@ -49,6 +49,30 @@ export class MySQLCitizenRepository implements ICitizenRepository {
     }
   }
 
+  async updateByCPF(name: string, cpf: string): Promise<void> {
+    try {
+      await pool.execute<ResultSetHeader>(
+        'UPDATE citizens SET name = ? WHERE cpf = ?',
+        [name, cpf]
+      )
+    } catch (error) {
+      console.error('Error finding citizen by CPF in database:', error);
+      throw new Error('Erro ao buscar cidadão por CPF no banco de dados');
+    }
+  }
+
+  async deleteByCPF(cpf: string): Promise<void> {
+    try {
+      await pool.execute<ResultSetHeader>(
+        'DELETE FROM citizens WHERE cpf = ?',
+        [cpf]
+      );
+    } catch (error) {
+      console.error('Error creating citizen in database:', error);
+      throw new Error('Erro ao cadastrar cidadão no banco de dados');
+    }
+  }
+
   async getAll(): Promise<Citizen[]> {
     try {
       const [rows] = await pool.execute<RowDataPacket[]>(

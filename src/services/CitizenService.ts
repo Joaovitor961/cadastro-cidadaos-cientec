@@ -16,7 +16,6 @@ export class CitizenService implements ICitizenService {
       throw new Error('Nome é obrigatório');
     }
 
-    // Remove caracteres especiais do CPF
     const cleanCpf = cpf.replace(/\D/g, '');
 
     if (!this.validateCPF(cleanCpf)) {
@@ -40,6 +39,16 @@ export class CitizenService implements ICitizenService {
 
   async findByName(name: string): Promise<Citizen[]> {
     return this.repository.findByName(name);
+  }
+
+  async updateByCPF(name: string, cpf: string): Promise<void> {
+    const cleanCpf = cpf.replace(/\D/g, '');
+    return this.repository.updateByCPF(name, cleanCpf);
+  }
+
+
+  async deleteByCPF(cpf: string): Promise<void> {
+    return this.repository.deleteByCPF(cpf);
   }
 
   async getAllCitizens(): Promise<Citizen[]> {

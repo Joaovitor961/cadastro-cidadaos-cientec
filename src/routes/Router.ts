@@ -32,21 +32,33 @@ export class Router {
     };
 
     if (pathname === '/api/citizens') {
-      if (req.method === 'POST') {
-        await this.citizenController.create(request, response);
-      } else if (req.method === 'GET') {
-        const { cpf, name } = request.query;
+      switch (req.method) {
+        case 'POST':
+          await this.citizenController.create(request, response);
+          break;
+        case 'GET':
+          const { cpf, name } = request.query;
 
-        if (cpf) {
-          await this.citizenController.findByCPF(request, response);
-        } else if (name) {
-          await this.citizenController.findByName(request, response);
-        } else {
-          await this.citizenController.getAll(request, response);
-        }
-      } else {
-        res.writeHead(405, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Método não permitido' }));
+          if (cpf) {
+            await this.citizenController.findByCPF(request, response);
+          } else if (name) {
+            await this.citizenController.findByName(request, response);
+          } else {
+            await this.citizenController.getAll(request, response);
+          }
+          break;
+        case 'DELETE':
+          await this.citizenController.deleteByCPF(request, response);  
+          break;
+        
+        case 'PUT':
+          await this.citizenController.updateByCPF(request, response);  
+          break;
+
+        default:
+          res.writeHead(405, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Método não permitido' }));
+          break;
       }
     } else {
       res.writeHead(404, { 'Content-Type': 'application/json' });

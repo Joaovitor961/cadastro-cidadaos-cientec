@@ -21,6 +21,14 @@ export class CitizenRepository implements ICitizenRepository {
         return this.repository.findByName(name);
     }
 
+    async updateByCPF(name: string, cpf: string): Promise<void> {
+        return this.repository.updateByCPF(name, cpf);
+    }
+
+    async deleteByCPF(cpf: string): Promise<void> {
+        return this.repository.deleteByCPF(cpf)
+    }
+
     async getAll(): Promise<Citizen[]> {
         return this.repository.getAll();
     }

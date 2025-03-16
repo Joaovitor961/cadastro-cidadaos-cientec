@@ -8,8 +8,13 @@ Sistema de cadastro de cidadãos brasileiros com validação de CPF e busca por 
 - Validação automática de CPF
 - Busca por CPF ou nome
 - Banco de dados em MySQL
+
+## Funcionalidades-Extras
+
 - Testes automatizados
 - Gravação de logs da aplicação (/log/app.log)
+- Remoção de cidadão
+- Alterar cidadão existente
 
 ## Pré-requisitos
 
@@ -57,3 +62,4 @@ npm test
 - HTML/CSS
 - Jest para testes (parte bônus)
 - cpf-cnpj-validator (validação de CPF)
+- SweetAlert2

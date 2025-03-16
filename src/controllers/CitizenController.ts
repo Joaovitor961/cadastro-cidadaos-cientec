@@ -63,6 +63,29 @@ export class CitizenController {
     }
   }
 
+  async deleteByCPF(req: Request, res: Response) {
+    try {
+      const cpf = req.query.cpf as string;
+
+      await this.service.deleteByCPF(cpf);
+      
+      res.json({message: "Cidadao deletado com sucesso!"});
+    } catch (error) {
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+
+  async updateByCPF(req: Request, res: Response) {
+    try {
+      const name = req.body.name as string;
+      const cpf = req.query.cpf as string;
+      const citizen = await this.service.updateByCPF(name, cpf);
+      res.json(citizen);
+    } catch (error) {
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+
   async getAll(req: Request, res: Response) {
     try {
       const citizens = await this.service.getAllCitizens();

@@ -2,7 +2,6 @@ import { ICitizenRepository } from '../src/repositories/ICitizenRepository';
 import { Citizen } from '../src/models/Citizen';
 import { CitizenService } from '../src/services/CitizenService';
 
-// Mock repository
 class MockCitizenRepository implements ICitizenRepository {
   private citizens: Citizen[] = [];
 
@@ -20,6 +19,20 @@ class MockCitizenRepository implements ICitizenRepository {
       c.name.toLowerCase().includes(name.toLowerCase())
     );
   }
+
+  async updateByCPF(name: string, cpf: string): Promise<void> {
+    const citizen = this.citizens.find(c => c.cpf === cpf);
+    if(citizen)
+      citizen.name = name;
+  }
+
+  async deleteByCPF(cpf: string): Promise<void> {
+    const formattedCPF = cpf.replace(/\D/g, ''); 
+    const index = this.citizens.findIndex(c => c.cpf === formattedCPF);
+    if (index !== -1) {
+        this.citizens.splice(index, 1);
+    }
+}
 
   async getAll(): Promise<Citizen[]> {
     return [...this.citizens];
@@ -106,6 +119,43 @@ describe('CitizenService', () => {
     it('should return empty array when no matches', async () => {
       const found = await service.findByName('Pedro');
       expect(found.length).toBe(0);
+    });
+  });
+
+  describe('updateByCPF', () => {
+    beforeEach(async () => {
+      await service.createCitizen('João Silva', '529.982.247-25');
+    });
+  
+    it('should update citizen name by CPF', async () => {
+      await service.updateByCPF('João Carlos', '529.982.247-25');
+      const updated = await service.findByCPF('529.982.247-25');
+      expect(updated).toBeDefined();
+      expect(updated?.name).toBe('João Carlos');
+    });
+  
+    it('should not throw error for non-existent CPF', async () => {
+      await expect(service.updateByCPF('Pedro Souza', '987.654.321-00')).resolves.not.toThrow();
+      const found = await service.findByCPF('987.654.321-00');
+      expect(found).toBeNull();
+    });
+  });
+
+  describe('deleteByCPF', () => {
+    beforeEach(async () => {
+      await service.createCitizen('João Silva', '529.982.247-25');
+    });
+  
+    it('should delete citizen by CPF', async () => {
+      await service.deleteByCPF('529.982.247-25');
+      const deleted = await service.findByCPF('529.982.247-25');
+      expect(deleted).toBeNull();
+    });
+  
+    it('should not throw error for non-existent CPF', async () => {
+      await expect(service.deleteByCPF('987.654.321-00')).resolves.not.toThrow();
+      const found = await service.findByCPF('987.654.321-00');
+      expect(found).toBeNull();
     });
   });
 });
